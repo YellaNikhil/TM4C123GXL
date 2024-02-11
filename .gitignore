@@ -8,6 +8,17 @@
 *.uvgui
 *.uvgui.*
 *.uvguix.*
+Project/**/Debug/*
+!Project/ECLIPSE-GCC-LINUX/RMP/Debug/*
+!Project/ECLIPSE-GCC-STM32F767IGT6/RMP/Debug/*
+!Project/ECLIPSE-GCC-STM32F767IGT6-RVM/RMP/Debug/*
+*.tmp
+*.uvgui*
+*.uvopt*
+*.dep
+*.TMP
+*.uvprojx
+*.scvd
 
 # Listing files
 *.cod
