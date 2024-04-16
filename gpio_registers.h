@@ -11,13 +11,12 @@
 //#define DELAY_10MS 625000UL
 #define DELAY_US_500 2075
 #define DELAY_US_1000 4162
-#define DELAY_MS_1 DELAY_US_1000
 #define DELAY_MS_1000 1000
 
 
 /* System Clock Enable */
 #define RCGC_GPIO (*((volatile uint32_t *)0x400FE608))
-#define GPIOA_CLK_ENABLE() ((RCGC_GPIO |= (1 << 1)))
+#define GPIOA_CLK_ENABLE() ((RCGC_GPIO |= (1 << 0)))
 #define GPIOB_CLK_ENABLE() ((RCGC_GPIO |= (1 << 1)))
 #define GPIOC_CLK_ENABLE() ((RCGC_GPIO |= (1 << 2)))
 #define GPIOD_CLK_ENABLE() ((RCGC_GPIO |= (1 << 3)))
@@ -37,6 +36,21 @@
 #define HIGH 1
 #define SET HIGH
 #define UNSET LOW
+#define INPUT LOW
+#define OUTPUT HIGH
+
+/* Alternate Function Declarations*/
+#define ALT_FUNC_ANALOG_MODE 0x00
+#define ALT_FUNC_UART_MODE 0x01
+#define ALT_FUNC_SSI_MODE 0x02
+#define ALT_FUNC_I2C_MODE 0x03
+#define ALT_FUNC_PWM0_MODE 0x04
+#define ALT_FUNC_PWM1_MODE 0x05
+#define ALT_FUNC_PH_MODE 0x06
+#define ALT_FUNC_TIMER_MODE 0x07
+#define ALT_FUNC_CAN_MODE 0x08
+#define ALT_FUNC_ANALOG_COMPARATOR_MODE 0x09
+#define ALT_FUNC_TRACE_DATA_MODE 0x14
 
 
 /* GPIO Lock Reset */
@@ -132,14 +146,24 @@
 typedef struct{
 	/*Port of the GPIO pin */
 	GPIOA_Type *port;
+	
 	/*Pin no of the GPIO PORT*/
 	uint32_t pin_no;
+	
+	/* Enable or Disable the digital for pin*/
+	uint32_t digital_enable;
+	
 	/*GPIO PORT operation type input(0) or output(1) */
 	uint32_t optype;
+	
 	/*GPIO Pin Pull up or pull down mode */
 	uint32_t pulltype;
-	/*alternate Functionality of the GPIO pin*/
-	uint32_t alternate;
+	
+	/*Alternate Functionality enable of the GPIO pin*/
+	uint32_t alternate_enable;
+	
+	/*Set alternate functionality for the GPIO pin*/
+	uint32_t alternate_function;
 }gpio_info;
 
 /* GPIO Driver Functions */
@@ -162,6 +186,8 @@ void delay(uint32_t);
 
 void delay_ms(uint32_t);
 
-void delay_us(int);  
+void delay_us(uint32_t);  
+
+void delay_wait_1s(void);
 	
 #endif

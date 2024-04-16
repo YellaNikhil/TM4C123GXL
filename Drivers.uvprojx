@@ -430,19 +430,9 @@
               <FilePath>.\joystick.h</FilePath>
             </File>
             <File>
-              <FileName>triangular_wave.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\triangular_wave.h</FilePath>
-            </File>
-            <File>
               <FileName>led_blink.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\led_blink.h</FilePath>
-            </File>
-            <File>
-              <FileName>thermistor.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\thermistor.h</FilePath>
             </File>
             <File>
               <FileName>lcd.h</FileName>
@@ -463,6 +453,26 @@
               <FileName>ultrasonic.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\ultrasonic.h</FilePath>
+            </File>
+            <File>
+              <FileName>serial.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\serial.h</FilePath>
+            </File>
+            <File>
+              <FileName>spi.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\spi.h</FilePath>
+            </File>
+            <File>
+              <FileName>uart.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\uart.h</FilePath>
+            </File>
+            <File>
+              <FileName>l_298n_motor_driver.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\l_298n_motor_driver.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -490,11 +500,6 @@
               <FilePath>.\seven_segment_display.c</FilePath>
             </File>
             <File>
-              <FileName>triangular_wave.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\triangular_wave.c</FilePath>
-            </File>
-            <File>
               <FileName>pattern.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\pattern.c</FilePath>
@@ -513,6 +518,11 @@
               <FileName>led_blink.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\led_blink.c</FilePath>
+            </File>
+            <File>
+              <FileName>thermistor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\thermistor.h</FilePath>
             </File>
             <File>
               <FileName>thermistor.c</FileName>
@@ -538,6 +548,21 @@
               <FileName>ultrasonic.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\ultrasonic.c</FilePath>
+            </File>
+            <File>
+              <FileName>serial.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\serial.c</FilePath>
+            </File>
+            <File>
+              <FileName>uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>l_298_motor_driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\l_298_motor_driver.c</FilePath>
             </File>
           </Files>
         </Group>
