@@ -23,13 +23,14 @@
 #define OSCSRC_LFIOSC (0x3 << 4)
 
 /*Use PWMDIV */
-#define USEPWMDIV() (SYSCTL->RCC |= (1 << 20))
-#define PWMDIV_2()  (SYSCTL->RCC &= (~(0x7UL << 17)))
-#define PWMDIV_4()  (SYSCTL->RCC & = (~(0x6UL << 17)))
-#define PWMDIV_8()  (SYSCTL->RCC |= (~(0x5UL << 17)))
-#define PWMDIV_16()  (SYSCTL->RCC |= (~(0x4UL << 17)))
-#define PWMDIV_32()  (SYSCTL->RCC |= (~(0x3UL << 17)))
-#define PWMDIV_64()  (SYSCTL->RCC |= (~(0x2UL << 17)))
+#define USEPWMDIV()  (SYSCTL->RCC |= (1 << 20))
+#define CLEARPWM()   (SYSCTL->RCC &= (~(0x7UL << 17)))
+#define PWMDIV_2()   (SYSCTL->RCC &= (~(0x7UL << 17)))
+#define PWMDIV_4()   (SYSCTL->RCC & = (0x01UL << 17))
+#define PWMDIV_8()   (SYSCTL->RCC &= (0x02UL << 17))
+#define PWMDIV_16()  (SYSCTL->RCC &= (0x03UL << 17))
+#define PWMDIV_32()  (SYSCTL->RCC &= (0x04UL << 17))
+#define PWMDIV_64()  (SYSCTL->RCC &= (0x05UL << 17))
 
 void init_servo_motor(void);
 void run_servo_motor(void);
