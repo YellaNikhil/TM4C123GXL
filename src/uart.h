@@ -7,14 +7,18 @@
 
 
 /* Flag Regsiter check*/
-#define	TRANSMIT_FIFO_EMPTY 0x80
-#define RECEIVE_FIFO_FULL 0x40
-#define TRANSMIT_FIFO_FULL 0x20
-#define RECEIVE_FIFO_EMPTY 0x10
+#define	UART_TX_FIFO_EMPTY 0x80
+#define UART_RX_FIFO_FULL 0x40
+#define UART_TX_FIFO_FULL 0x20
+#define UART_RX_FIFO_EMPTY 0x10
 #define UART_BUSY 0x08
-#define CLEAR_TO_SEND 0x00
+#define UART_CLEAR_TO_SEND 0x00
 
+/* UART Baudrate Integer Values */
+#define UART_9600_INTERGER 104
 
+/* UART Baudrate Decimal values */
+#define UART_9600_DECIMAL 11
 
 
 typedef struct{
@@ -33,6 +37,7 @@ typedef struct{
 void uart_init(uart_handler*);
 void uart_transmit_data(uart_handler *, const char *);
 char* uart_receive_data(uart_handler *);
+char uart_receive_data_byte(const UART0_Type* uart_module);
 
 
 #endif

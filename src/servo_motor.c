@@ -25,8 +25,6 @@ void init_servo_motor(void){
 	PWM1->_3_CTL |= (1<<0); //enable pwm1 counter
 	PWM1->ENABLE |=	(1<<6); //enable pwm1 channel
 }
-
-
 	
 void run_servo_motor(void){
 		turn_servo_degrees_0();
