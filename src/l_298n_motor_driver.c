@@ -1,4 +1,5 @@
 #include "l_298n_motor_driver.h"
+#include "servo_motor.h"
 
 static void motor_pwm_wave_enable(PWM0_Type *pwm_port, uint32_t pin_type);
 static void set_speed_of_motor(PWM0_Type* pwm_port, uint32_t pwm_type, uint32_t speed);
@@ -78,12 +79,7 @@ static void set_speed_of_motor(PWM0_Type* pwm_port, uint32_t pwm_type, uint32_t 
 
 
 static void motor_pwm_wave_enable(PWM0_Type *pwm_port, uint32_t pin_type){
-	/* Clearing the PWMDIV in RCC register */
-	SYSCTL->RCC &= (~(0x7UL << 17));
-	
-	/* Need to give a static value for different drives like L298N, and for TB6612FNB driver. */
-	SYSCTL->RCC |= (0x2ul << 17);
-	
+		
 	/* PWM frequency should be anywhere between 500Hz to 20KHz. Need to change the below values accordingly.*/ 
 	#if 1
 	/* There are four generators controlling two outputs for each PWM module
@@ -102,7 +98,7 @@ static void motor_pwm_wave_enable(PWM0_Type *pwm_port, uint32_t pin_type){
 			pwm_port->_0_GENA |= (3<<2); //set PWM0A high, when matches counter = Load Value
 			pwm_port->_0_GENA	|= (2<<6); //set PWM0A low, when PWM0CMPA = counter value
 			pwm_port->_0_CTL |= (1<<0); //enable pwm0 counter
-			pwm_port->ENABLE |=	(1<<0); //enable pwm0 channel
+			pwm_port->ENABLE |=	(1<<0); //enable MnPWM0 channel
 			break;
 		case 1:
 			pwm_port->_0_CTL&= (unsigned)(~(1<<0)); // first disable pwm1 counter
@@ -111,8 +107,8 @@ static void motor_pwm_wave_enable(PWM0_Type *pwm_port, uint32_t pin_type){
 			pwm_port->_0_CMPB = 4095; //set duty cycle 0%
 			pwm_port->_0_GENB |= (3<<2); //set PWM0B high, when matches counter = Load Value
 			pwm_port->_0_GENB	|= (2<<6); //set PWM0B low, when PWM0CMPB = counter value
-			pwm_port->_0_CTL |= (1<<0); //enable pwm0 counter
-			pwm_port->ENABLE |=	(1<<0); //enable pwm channel
+			pwm_port->_0_CTL |= (1<<0); //enable PWM0 counter
+			pwm_port->ENABLE |=	(1<<1); //enable MnPWM1 channel
 			break;
 		case 2:
 			pwm_port->_1_CTL&= (unsigned)(~(1<<0)); // first disable pwm1 counter
@@ -121,8 +117,8 @@ static void motor_pwm_wave_enable(PWM0_Type *pwm_port, uint32_t pin_type){
 			pwm_port->_1_CMPA = 4095; //set duty cycle 0%
 			pwm_port->_1_GENA |= (3<<2); //set PWM1A high, when matches counter = Load Value
 			pwm_port->_1_GENA	|= (2<<6); //set PWM1A low, when PWM1CMPA = counter value
-			pwm_port->_1_CTL |= (1<<0); //enable pwm1 counter
-			pwm_port->ENABLE |=	(1<<0); //enable pwm channel
+			pwm_port->_1_CTL |= (1<<0); //enable PWM1 counter
+			pwm_port->ENABLE |=	(1<<2); //enable MnPWM2 channel
 			break;
 		case 3:
 			pwm_port->_1_CTL&= (unsigned)(~(1<<0)); // first disable pwm1 counter
@@ -131,18 +127,18 @@ static void motor_pwm_wave_enable(PWM0_Type *pwm_port, uint32_t pin_type){
 			pwm_port->_1_CMPB = 4095; //set duty cycle 0%
 			pwm_port->_1_GENB |= (3<<2); //set PWM1B high, when matches counter = Load Value
 			pwm_port->_1_GENB	|= (2<<6); //set PWM1B low, when PWM1CMPB = counter value
-			pwm_port->_1_CTL |= (1<<0); //enable pwm1 counter
-			pwm_port->ENABLE |=	(1<<0); //enable pwm channel
+			pwm_port->_1_CTL |= (1<<0); //enable PWM1 counter
+			pwm_port->ENABLE |=	(1<<3); //enable MnPWM3 channel
 			break;
 		case 4:
 			pwm_port->_2_CTL &= (unsigned)(~(1<<0)); // first disable pwm1 counter
 			pwm_port->_2_CTL &= (unsigned)(~(1<<1)); // select the downward counter
-			pwm_port->_2_LOAD = (4095); //set the pwm2 period 2MHz system clock to acheive 488.89Hz ~= 490Hz
+			pwm_port->_2_LOAD = (4095); //set the PWM2 period 2MHz system clock to acheive 488.89Hz ~= 490Hz
 			pwm_port->_2_CMPA = 4095; //set duty cycle 0%
 			pwm_port->_2_GENA |= (3<<2); //set PWM2A high, when matches counter = Load Value
 			pwm_port->_2_GENA	|= (2<<6); //set PWM2A low, when PWM2CMPA = counter value
-			pwm_port->_2_CTL |= (1<<0); //enable pwm2 counter
-			pwm_port->ENABLE |=	(1<<0); //enable pwm channel
+			pwm_port->_2_CTL |= (1<<0); //enable PWM2 counter
+			pwm_port->ENABLE |=	(1<<4); //enable MnPWM4 channel
 			break;
 		case 5:
 			pwm_port->_2_CTL &= (unsigned)(~(1<<0)); // first disable pwm1 counter
@@ -151,8 +147,8 @@ static void motor_pwm_wave_enable(PWM0_Type *pwm_port, uint32_t pin_type){
 			pwm_port->_2_CMPB = 4095; //set duty cycle 0%
 			pwm_port->_2_GENB |= (3<<2); //set PWM2B high, when matches counter = Load Value
 			pwm_port->_2_GENB	|= (2<<6); //set PWM2B low, when PWM2CMPB = counter value
-			pwm_port->_2_CTL |= (1<<0); //enable pwm2 counter
-			pwm_port->ENABLE |=	(1<<0); //enable pwm channel
+			pwm_port->_2_CTL |= (1<<0); //enable PWM2 counter
+			pwm_port->ENABLE |=	(1<<5); //enable MnPWM5 channel
 			break;
 		case 6:
 			pwm_port->_3_CTL&= (unsigned)(~(1<<0)); // first disable pwm1 counter
@@ -162,7 +158,7 @@ static void motor_pwm_wave_enable(PWM0_Type *pwm_port, uint32_t pin_type){
 			pwm_port->_3_GENA |= (3<<2); //set PWM3A high, when matches counter = Load Value
 			pwm_port->_3_GENA	|= (2<<6); //set PWM3A low, when PWM3CMPA = counter value
 			pwm_port->_3_CTL |= (1<<0); //enable pwm3 counter
-			pwm_port->ENABLE |=	(1<<0); //enable pwm channel
+			pwm_port->ENABLE |=	(1<<6); //enable MnPWM6 channel
 			break;
 		case 7:
 			pwm_port->_3_CTL&= (unsigned)(~(1<<0)); // first disable pwm1 counter
@@ -171,8 +167,8 @@ static void motor_pwm_wave_enable(PWM0_Type *pwm_port, uint32_t pin_type){
 			pwm_port->_3_CMPB = 4095; //set duty cycle 0%
 			pwm_port->_3_GENB |= (3<<2); //set PWM3B high, when matches counter = Load Value
 			pwm_port->_3_GENB	|= (2<<6); //set PWM3B low, when PWM3CMPB = counter value
-			pwm_port->_3_CTL |= (1<<0); //enable pwm3 counter
-			pwm_port->ENABLE |=	(1<<0); //enable pwm channel
+			pwm_port->_3_CTL |= (1<<0); //enable PWM3 counter
+			pwm_port->ENABLE |=	(1<<7); //enable MnPWM7 channel
 			break;
 		default:
 			break;
