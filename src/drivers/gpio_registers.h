@@ -102,7 +102,7 @@
 #define GPIODEN_PORT_D (*((volatile uint32_t*) 0x4000751C))
 #define GPIODIR_PORT_D (*((volatile uint32_t*) 0x40007400))
 #define GPIOAFSEL_PORT_D (*((volatile uint32_t*) 0x40007420))
-#define GPIOPUR_PORT_D (*((volatile uint32_t*) 0x40007510)
+#define GPIOPUR_PORT_D (*((volatile uint32_t*) 0x40007510))
 #define GPIOPDR_PORT_D (*((volatile uint32_t*) 0x40007514))
 #define GPIOLOCK_PORT_D (*((volatile uint32_t*) 0x40007520))
 #define GPIOAMSEL_PORT_D (*((volatile uint32_t*) 0x40007528))
@@ -115,7 +115,7 @@
 #define GPIODIR_PORT_E (*((volatile uint32_t*) 0x40024400))
 #define GPIODEN_PORT_E (*((volatile uint32_t*) 0x4002451C))
 #define GPIOAFSEL_PORT_E (*((volatile uint32_t*) 0x40045420))
-#define GPIOPUR_PORT_E (*((volatile uint32_t*) 0x40024510)
+#define GPIOPUR_PORT_E (*((volatile uint32_t*) 0x40024510))
 #define GPIOPDR_PORT_E (*((volatile uint32_t*) 0x40024514))
 #define GPIOLOCK_PORT_E (*((volatile uint32_t*) 0x40024520))
 #define GPIOAMSEL_PORT_E (*((volatile uint32_t*) 0x40024528))
@@ -130,7 +130,7 @@
 #define GPIODIR_PORT_F (*((volatile uint32_t*) 0x40025400))
 #define GPIOAFSEL_PORT_F (*((volatile uint32_t*) 0x40025420))
 #define GPIOPUR_PORT_F (*((volatile uint32_t*) 0x40025510))
-#define GPIOPDR_PORT_F (*((volatile uint32_t*) 0x40025514)
+#define GPIOPDR_PORT_F (*((volatile uint32_t*) 0x40025514))
 #define GPIOAMSEL_PORT_F (*((volatile uint32_t*) 0x40025528))
 #define GPIOLOCK_PORT_F (*((volatile uint32_t*) 0x40025520))
 #define GPIOPCTL_PORT_F (*((volatile uint32_t*) 0x4002552C))
@@ -178,7 +178,7 @@ void turn_off_port_pin(volatile uint32_t* PORT, uint32_t value);
 
 uint8_t read_port_pin(volatile uint32_t* PORT, uint32_t pin_no);
 
-void gpio_init(GPIOA_Type* PORT, gpio_info*);
+void gpio_init(GPIOA_Type* PORT, gpio_info *);
 
 void init_sys_tick_timer(void);
 
