@@ -67,6 +67,6 @@ SECTIONS
         _ebss = .;      /* end of .bss segment */
     } > RAM
 
-
+    _end = .; /* end of the program,used in syscall.c to simulate end of RAM */
 
 }
