@@ -21,6 +21,8 @@ void serial_begin(void) //UART0 -> PA0(RX) PA1(TX) 9600
 	UART0->LCRH |= (3<<5); //set data length in the transmission
 	UART0->CC = 0x05; //select clock source
 	UART0->CTL |= (1<<0)|(1<<8)|(1<<9); //enable uart0, TX and RX
+	UART0->IM |= (1 << 4); // Enable RX interrupt for UART0
+	NVIC_EnableIRQ(UART0_IRQn); // Enable UART0 interrupt in NVIC
 }
 
 /**

@@ -1,17 +1,23 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <gpio_registers.h>
-#include <uart.h>
 #include <serial.h>
 #include <queue.h>
 
 void setup(void);
 void loop(void);
+// void UART0_ISR(void) __attribute__((interrupt("IRQ"))); // UART0 interrupt handler
 
-// UART Helper Functions
-char UART_Receiver(UART0_Type *uart);
+volatile char ch = 'a'; // Global variable to hold received character
+// volatile queue_t rx_queue, tx_queue; // Queue to hold received characters
+typedef enum{
+    NO_INPUT_FROM_CONSOLE = 0,
+    INPUT_RECEIVED = 1
+}serial_status;
 
-uart_handler serial;
+serial_status serial_input = NO_INPUT_FROM_CONSOLE; // Flag to indicate if a character has been received
+
+char buffer_data[DATA_SIZE]; // Buffer to hold received data
 
 int main(void) {
     setup();
@@ -36,39 +42,7 @@ void setup(void) {
     
     //Initialize UART Clock
     GPIOA_CLK_ENABLE();
-    SYSCTL->RCGCUART |= (1 << 0); // Enable UART0 clock
-
-    // UART Configuration
-    gpio_info tx = {
-        .port = GPIOA,
-        .pin_no = PIN1, // Using PA0 for TX
-        .digital_enable = 1,
-        .optype = OUTPUT,
-        .pulltype = 0, // No pull-up or pull-down
-        .alternate_enable = 1,
-        .alternate_function = ALT_FUNC_UART_MODE
-    };
-
-    gpio_info rx = {
-        .port = GPIOA,
-        .pin_no = PIN0, // Using PA1 for RX
-        .digital_enable = 1,
-        .optype = INPUT,
-        .pulltype = 0, // No pull-up or pull-down
-        .alternate_enable = 1,
-        .alternate_function = ALT_FUNC_UART_MODE
-    };    
-
-    serial.uart = UART0;
-    serial.tx = &tx;
-    serial.rx = &rx;
-    serial.baud_rate_integer_value = 104; // Example value for 9600 baud rate
-    serial.baud_rate_decimal_value = 11;  // Example value for 9600 baud rate
-    serial.clock_source = 0;              // Use system clock
-    serial.data_length = 0x60;            // 8 data bits, no parity,
-    serial.parity_bit = 0;                // No parity
-    serial.interrupt_enable = 0;          // No interrupts
-    serial.data = NULL;                    // No data buffer
+    SYSCTL->RCGCUART |= (1 << 0); // Enable UART0 clock   
     
     // Initialize GPIO for LED on PF1
     gpio_info led_info = {
@@ -83,34 +57,34 @@ void setup(void) {
     
 
     // Initialize UART
-    uart_init(&serial); 
-    uart_transmit_data(&serial, "UART Initialized\n\r");
+    serial_begin(); 
+    serial_println("UART Initialized\r");
 
     // Initialize GPIO for LED
-    gpio_init(GPIOF, &led_info);
-
-    led_info.pin_no = PIN2;
-
     gpio_init(GPIOF, &led_info);
 }
 
 void loop(void) {
-    // Toggle LED on PF1
-    // char c = UART_Receiver(&(serial.uart));
-    // if (c == '1') {
-        set_high_port_pin(GPIOF, PIN1);
-        delay_ms(1000); // Delay for 1 second
-    //     set_low_port_pin(GPIOF, PIN2);
-    //     uart_transmit_data(&serial, "RED LED ON, GREEN LED OFF\n");
-    // } else if (c == '0') {
-        set_low_port_pin(GPIOF, PIN1);
-        delay(1000); // Delay for 1 second
-    //     uart_transmit_data(&serial, "RED LED OFF, GREEN LED ON\n");
-    // } else {
-    //     uart_transmit_data(&serial, "RED & GREEN LED OFF\n");
-    // }
-    // char string[100] = "Received: ";
-    // sprintf(string, "Received: %c\n", c);
-    uart_transmit_data(&serial, "Hello from UART!\n\r");
+    // char data = serial_read(); // Read character from UART
+     switch(serial_input){
+        case NO_INPUT_FROM_CONSOLE:
+            // No input received, do nothing
+            serial_println("Hello from UART!!!\r");
+            set_low_port_pin(GPIOF, PIN1);
+            break;
+        case INPUT_RECEIVED:
+            // Process the received character
+            // sprintf(buffer_data, "Received input: %c\r", ch);
+            serial_println(&ch);
+            set_high_port_pin(GPIOF, PIN1);
+            serial_input = NO_INPUT_FROM_CONSOLE; // Reset the flag after processing
+            break;
+    }
     delay_ms(1000); // Delay for 1 second
+}
+
+void UART0_ISR(void){
+    ch = (char)(UART0->DR & 0xff);
+    UART0->ICR &= ~(0x010); // Clear receive interrupt
+    serial_input = INPUT_RECEIVED; // Set the flag to indicate a character has been received
 }
