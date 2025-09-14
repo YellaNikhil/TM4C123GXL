@@ -15,7 +15,7 @@
 
 
 /* System Clock Enable */
-#define RCGC_GPIO (*((volatile uint32_t *)0x400FE608))
+#define RCGC_GPIO (*((__IO uint32_t *)0x400FE608))
 #define GPIOA_CLK_ENABLE() ((RCGC_GPIO |= (1 << 0)))
 #define GPIOB_CLK_ENABLE() ((RCGC_GPIO |= (1 << 1)))
 #define GPIOC_CLK_ENABLE() ((RCGC_GPIO |= (1 << 2)))
